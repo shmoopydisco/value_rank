@@ -82,19 +82,26 @@ def main():
         if submitted:
             if is_response_valid(response):
                 st.success("Thank you for your submission!")
-                # for column in range(len(response[0])):
-                #     print([row[column] for row in response])
-                #     concatanated_values = ";".join([row[column] for row in response])
-                st.write(response)
-                # conn = st.experimental_connection("values_db", type="sql")
-                # with conn.session as s:
-                #     s.execute(
-                #         "CREATE TABLE IF NOT EXISTS values ( id INTEGER UNIQUE, value1 TEXT NOT NULL, value2 TEXT NOT NULL, value3 TEXT NOT NULL, value4 TEXT NOT NULL, value5 TEXT NOT NULL, value6 TEXT NOT NULL, value7 TEXT NOT NULL, PRIMARY KEY(id) )"
-                #     )
-                #     s.execute(
-                #         f"INSERT INTO values (value{column+1}) VALUES (?)",
-                #         concatanated_values,
-                #     )
+                # join every list with several items into one list with items joined by semicolon
+                concat_response = {
+                    f"value{column_id+1}": ";".join(response[column_id])
+                    for column_id in response
+                    if response[column_id]
+                }
+                st.write(concat_response)
+                conn = st.experimental_connection("values_db", type="sql")
+                with conn.session as s:
+                    # create table with 7 values
+                    s.execute(
+                        """CREATE TABLE IF NOT EXISTS user_values (value1 TEXT NOT NULL, value2 TEXT NOT NULL, value3 TEXT NOT NULL, value4 TEXT NOT NULL, value5 TEXT NOT NULL, value6 TEXT NOT NULL, value7 TEXT NOT NULL)"""
+                    )
+                    s.execute(
+                        "INSERT INTO user_values VALUES (:value1, :value2, :value3, :value4, :value5, :value6, :value7)",
+                        (concat_response),
+                    )
+                    s.commit()
+
+                st.dataframe(conn.query("SELECT * FROM user_values"))
 
             else:
                 st.error("Please fill in all the cells")

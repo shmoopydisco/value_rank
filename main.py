@@ -2,7 +2,7 @@ import streamlit as st
 
 
 def check_respond_valid(respond):
-    center = len(respond[0]) // 2
+    center = len(respond[0]) // 2  # middle of num of columns
     for row in range(4):
         for column in range(center - row, center + row + 1):
             if not respond[row][column]:
@@ -28,10 +28,11 @@ def main():
     """,
         unsafe_allow_html=True,
     )
+
     with st.form("my_form", clear_on_submit=False):
         # define empty 7x4 respond
         respond = [[None] * 7 for _ in range(4)]
-        for column_id, column in enumerate(st.columns(7)):
+        for column_id, column_container in enumerate(st.columns(7)):
             for row in range(4):
                 # skip the empty cells
                 if (
@@ -42,9 +43,14 @@ def main():
                 ):
                     continue
                 else:
-                    respond[row][column_id] = column.text_input(
-                        f"{row,column_id}",
+                    # add the pyramid cells
+                    respond[row][column_id] = column_container.text_input(
+                        f"{row,column_id}", label_visibility="hidden"
                     )
+
+        col1, col2 = st.columns([3, 1])
+        col1.header("Less important values ⬅️", anchor=False)
+        col2.header("➡️ Most important values", anchor=False)
 
         submitted = st.form_submit_button(
             "Submit",

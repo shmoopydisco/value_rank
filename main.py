@@ -82,7 +82,6 @@ def main():
                     for column_id in response
                     if response[column_id]
                 }
-                st.write(concat_response)
                 conn = st.experimental_connection("values_db", type="sql")
                 with conn.session as s:
                     # create table with 7 values
@@ -94,8 +93,6 @@ def main():
                         (concat_response),
                     )
                     s.commit()
-
-                st.dataframe(conn.query("SELECT * FROM user_values"))
 
             else:
                 st.error("Please fill in all the cells")

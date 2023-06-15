@@ -1,0 +1,5 @@
+streamlit
+SQLAlchemy
+mysqlclient
+git+https://github.com/sfc-gh-jcarroll/st-connection-prpr.git#subdirectory=gsheets_connection
+pandasql  # this is for example/st_app.py only

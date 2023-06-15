@@ -1,6 +1,13 @@
-from random import randint
-
 import streamlit as st
+
+
+def check_respond_valid(respond):
+    center = len(respond[0]) // 2
+    for row in range(4):
+        for column in range(center - row, center + row + 1):
+            if not respond[row][column]:
+                return False
+    return True
 
 
 def main():
@@ -35,7 +42,6 @@ def main():
                 ):
                     continue
                 else:
-                    print(row, column_id)
                     respond[row][column_id] = column.text_input(
                         f"{row,column_id}",
                     )
@@ -46,8 +52,11 @@ def main():
             use_container_width=True,
         )
         if submitted:
-            st.success("Submitted")
-            st.write(respond)
+            if check_respond_valid(respond):
+                st.success("Submitted")
+                st.write(respond)
+            else:
+                st.error("Please fill in all the cells")
 
 
 if __name__ == "__main__":

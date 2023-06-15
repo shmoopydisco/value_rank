@@ -2,12 +2,6 @@ import streamlit as st
 
 
 def is_response_valid(response):
-    # center = len(respond[0]) // 2  # middle of num of columns
-    # for row in range(4):
-    #     for column in range(center - row, center + row + 1):
-    #         if not respond[row][column]:
-    #             return False
-    # return True
     for column_id in response:
         for value in range(len(response[column_id])):
             if not response[column_id][value]:

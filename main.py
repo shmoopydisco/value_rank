@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_datalist import stDatalist
 
 
 def is_response_valid(response):
@@ -51,6 +52,24 @@ def main():
             5: [],
             6: [],
         }
+        suggestions = [
+            "עבודת צוות",
+            "התנהגות ראויה",
+            "יכולות הוראה",
+            "שימור סקרנות",
+            "רפלקציה",
+            "שימור חוסן",
+            "יושרה",
+            "מעורבות במחקר",
+            "יכולת מנהיגות",
+            "Professional identity formation",
+            "הומניסטיקה",
+            "מעורבות בקהילה",
+            "רוח באר שבע",
+            "ענווה",
+            "חמלה",
+            "חוסר שיפוטיות",
+        ]
         for column_id, column_container in enumerate(st.columns(7)):
             for row in range(4):
                 # skip the empty cells
@@ -58,11 +77,14 @@ def main():
                     continue
                 else:
                     # add the pyramid cells
-                    response[column_id].append(
-                        column_container.text_input(
-                            f"{row,column_id}", label_visibility="hidden"
+                    with column_container:
+                        response[column_id].append(
+                            stDatalist(
+                                label="",
+                                options=suggestions,
+                                key=f"{column_id}{row}",
+                            )
                         )
-                    )
 
         col1, col2 = st.columns([3, 1])
         col1.header("Less important values ⬅️", anchor=False)

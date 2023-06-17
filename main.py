@@ -1,5 +1,6 @@
 import streamlit as st
 from streamlit_datalist import stDatalist
+from sqlalchemy.sql import text
 
 
 def is_response_valid(response):
@@ -108,16 +109,25 @@ def main():
                 with conn.session as s:
                     # create table with 7 values
                     s.execute(
-                        """CREATE TABLE IF NOT EXISTS user_values (value1 TEXT NOT NULL, value2 TEXT NOT NULL, value3 TEXT NOT NULL, value4 TEXT NOT NULL, value5 TEXT NOT NULL, value6 TEXT NOT NULL, value7 TEXT NOT NULL)"""
+                        text(
+                            """CREATE TABLE IF NOT EXISTS user_values (
+                                value1 TEXT NOT NULL,
+                                value2 TEXT NOT NULL,
+                                value3 TEXT NOT NULL,
+                                value4 TEXT NOT NULL,
+                                value5 TEXT NOT NULL,
+                                value6 TEXT NOT NULL,
+                                value7 TEXT NOT NULL
+                            )"""
+                        )
                     )
                     s.execute(
-                        "INSERT INTO user_values VALUES (:value1, :value2, :value3, :value4, :value5, :value6, :value7)",
+                        text(
+                            "INSERT INTO user_values VALUES (:value1, :value2, :value3, :value4, :value5, :value6, :value7)"
+                        ),
                         (concat_response),
                     )
                     s.commit()
-
-            else:
-                st.error("Please fill in all the cells")
 
 
 if __name__ == "__main__":

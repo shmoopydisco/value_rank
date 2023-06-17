@@ -11,8 +11,12 @@ def main():
     )
 
     # get the values
-    conn = st.experimental_connection("values_db", type="sql", ttl=60 * 5)
-    user_data = conn.query("SELECT * FROM user_values", ttl=60 * 5)
+    try:
+        conn = st.experimental_connection("values_db", type="sql", ttl=60 * 5)
+        user_data = conn.query("SELECT * FROM user_values", ttl=60 * 5)
+    except Exception as e:
+        st.error(e)
+        st.stop()
 
     st.subheader("Top 1st Values")
     st.bar_chart(user_data["value7"].value_counts())

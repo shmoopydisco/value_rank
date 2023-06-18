@@ -99,7 +99,7 @@ def main():
         if submitted:
             if is_response_valid(response):
                 st.success("Thank you for your submission!")
-                # join every list with several items into one list with items joined by semicolon
+                # join items in every column with semicolon because sql doesnt support lists
                 concat_response = {
                     f"value{column_id+1}": ";".join(response[column_id])
                     for column_id in response
@@ -128,6 +128,8 @@ def main():
                         (concat_response),
                     )
                     s.commit()
+            else:
+                st.error("Please fill in all the values")
 
 
 if __name__ == "__main__":
